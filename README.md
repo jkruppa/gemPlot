@@ -1,6 +1,4 @@
-# gemPlot
-
-## Calculation and visualization of gemplots (3-dimensional extension of boxplot and bagplot)
+# gemPlot: Calculation and visualization of gemplots (3-dimensional extension of boxplot and bagplot)
 
 Gemplots are the 3-dimensional extension of the 1-dimensional boxplots and the 2-dimensional bagplot. 
 The package calculates a 3-dimensional median, an inner bag that contains 50 percent of the data and an outer bag. 

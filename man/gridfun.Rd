@@ -4,7 +4,7 @@
 \alias{gridfun}
 \title{Specifies grid for the calculation of the halfspace location depths}
 \usage{
-gridfun(D, grid.size, k)
+gridfun(D, grid.size, k = 4)
 }
 \arguments{
 \item{D}{Data set with rows representing the individuals and

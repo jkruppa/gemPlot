@@ -4,7 +4,7 @@
 \alias{loop}
 \title{Calculates the fence and the loop}
 \usage{
-loop(D, B, dm, inflation = 3)
+loop(D, B, inflation = 3, dm)
 }
 \arguments{
 \item{D}{Data set with rows representing the individuals and
@@ -15,11 +15,11 @@ dimensions, the colnames of D must be c("x", "y", "z").}
 the bag and the convex hull that forms the bag (determined by
 \code{\link{bag}}).}
 
-\item{dm}{The coordinates of the depth median as produced by
-\code{\link{depmed}}.}
-
 \item{inflation}{A numeric value > 0 that specifies the inflation
 factor of the bag relative to the median (default = 3).}
+
+\item{dm}{The coordinates of the depth median as produced by
+\code{\link{depmed}}.}
 }
 \value{
 A list containing the following elements:

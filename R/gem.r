@@ -107,7 +107,8 @@ hldepth <- function (D, G, verbose = TRUE)
 		}
 	}
 	if (dim(D)[2]>3) {
-		k = dim(G$grid.k)[1]
+		n <- dim(D)[1]
+          k = dim(G$grid.k)[1]
 		grid.size <- dim(G$grid.k)[2]
 		grid.kk <- grid.size^k
 		H <- G$H

@@ -79,6 +79,27 @@ text3d(D2[L$outliers==1,1], D2[L$outliers==1,2], D2[L$outliers==1,3], as.charact
 spheres3d(dm[1], dm[2], dm[3], col=white, radius=0.1)
 gem(B$coords, B$hull, blue)
 gem(L$coords.loop, L$hull.loop, blue)
+
+### Example of outlier detection with four principal components.
+### Attention: calculation is currently time-consuming.
+
+set.seed(123)
+n <- 200
+x1 <- rnorm(n, 0, 1)
+x2 <- rnorm(n, 0, 1)
+x3 <- rnorm(n, 0, 1)
+x4 <- rnorm(n, 0, 1)
+D <- data.frame(cbind(x1, x2, x3, x4))
+D[67,] = c(7, 0, 0, 0)
+
+date()
+G = gridfun(D, 20, 4)
+G$H = hldepth(D, G, verbose=TRUE)
+dm = depmed(G)
+B = bag(D, G)
+L = loop(D, B, dm=dm)
+which(L$outliers==1)
+date()
 }
 \author{
 Jochen Kruppa, Klaus Jung

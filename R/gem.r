@@ -28,20 +28,20 @@
 ##' @export
 gridfun <- function (D, grid.size, k=4) 
 {
-	if (dim(D)[2]<3) message("Error: number of dimensions must be greater or equal 3.")
-	if (dim(D)[2]==3) {
-		grid.x <- seq(min(D$x)[1], max(D$x)[1], length.out = grid.size)
-		grid.y <- seq(min(D$y)[1], max(D$y)[1], length.out = grid.size)
-		grid.z <- seq(min(D$z)[1], max(D$z)[1], length.out = grid.size)
-		H <- array(NA, c(grid.size, grid.size, grid.size))
-		return(list(grid.x = grid.x, grid.y = grid.y, grid.z = grid.z, H = H))
-	}	
-	if (dim(D)[2]>3) {
-		grid.k <- matrix(NA, k, grid.size)
-		for (i in 1:k) grid.k[i,] <- seq(min(D[,i])[1], max(D[,i])[1], length.out = grid.size)
-		H <- array(NA, rep(grid.size, k))
-		return(list(grid.k = grid.k, H = H))
-	}
+  if (dim(D)[2]<3) message("Error: number of dimensions must be greater or equal 3.")
+  if (dim(D)[2]==3) {
+    grid.x <- seq(min(D$x)[1], max(D$x)[1], length.out = grid.size)
+    grid.y <- seq(min(D$y)[1], max(D$y)[1], length.out = grid.size)
+    grid.z <- seq(min(D$z)[1], max(D$z)[1], length.out = grid.size)
+    H <- array(NA, c(grid.size, grid.size, grid.size))
+    return(list(grid.x = grid.x, grid.y = grid.y, grid.z = grid.z, H = H))
+  }              
+  if (dim(D)[2]>3) {
+    grid.k <- matrix(NA, k, grid.size)
+    for (i in 1:k) grid.k[i,] <- seq(min(D[,i])[1], max(D[,i])[1], length.out = grid.size)
+    H <- array(NA, rep(grid.size, k))
+    return(list(grid.k = grid.k, H = H))
+  }
 }
 
 
@@ -82,54 +82,54 @@ gridfun <- function (D, grid.size, k=4)
 ##' ### Specification of the grid and calculation of the halfspace location depth at each grid location.
 ##' G <- gridfun(D1, grid.size=20)
 ##' G$H <- hldepth(D1, G, verbose=TRUE)
-hldepth <- function (D, G, verbose = TRUE) 
+hldepth = function (D, G, verbose = TRUE) 
 {
-	require(depth)
-	if (dim(D)[2]==3) {
-		n <- dim(D)[1]
-		
-		grid.size <- length(G$grid.x)
-		perc <- 10
-		H <- G$H
-		for (i in 1:grid.size) {
-			for (j in 1:grid.size) {
-				for (k in 1:grid.size) {
-					u <- c(G$grid.x[i], G$grid.y[j], G$grid.z[k])
-					H[i, j, k] <- n * depth(u, D)
-				}
-			}
-			if (100 * i/grid.size >= perc && verbose == TRUE) {
-				message(paste("Calculation of halfspace location depths: ", 
-					round(100 * i/grid.size, 0), " % of grid points done", 
-					sep = ""))
-				perc <- perc + 10
-			}
-		}
-	}
-	if (dim(D)[2]>3) {
-		n <- dim(D)[1]
-          k = dim(G$grid.k)[1]
-		grid.size <- dim(G$grid.k)[2]
-		grid.kk <- grid.size^k
-		H <- G$H
-		H2 <- H
-		H2[1:grid.kk] <- array(1:grid.kk, rep(grid.size, k))
-		perc <- 10
-		for (j in 1:grid.kk) {
-			index <- which(H2==j, arr.ind=TRUE)
-			u <- rep(NA, k)
-			for (i in 1:k) u[i] <- G$grid.k[i,index[i]]
-			H[j] <- n * depth(u, D, approx=TRUE)
-			if (100 * j/grid.kk >= perc && verbose == TRUE) {
-				message(paste("Calculation of halfspace location depths: ", 
-					round(100 * j/grid.kk, 0), " % of grid points done", 
-					sep = ""))
-				perc <- perc + 10
-			}
-		}
-	}
-	return(H)	
+  require(depth)
+  if (dim(D)[2]==3) {
+    n <- dim(D)[1]
+    grid.size <- length(G$grid.x)
+    perc <- 10
+    H <- G$H
+    for (i in 1:grid.size) {
+      for (j in 1:grid.size) {
+        for (k in 1:grid.size) {
+          u <- c(G$grid.x[i], G$grid.y[j], G$grid.z[k])
+          H[i, j, k] <- n * depth(u, D)
+        }
+      }
+      if (100 * i/grid.size >= perc && verbose == TRUE) {
+        message(paste("Calculation of halfspace location depths: ", 
+                      round(100 * i/grid.size, 0), " % of grid points done", 
+                      sep = ""))
+        perc <- perc + 10
+      }
+    }
+  }
+  if (dim(D)[2]>3) {
+    n <- dim(D)[1]
+    k = dim(G$grid.k)[1]
+    grid.size <- dim(G$grid.k)[2]
+    grid.kk <- grid.size^k
+    H <- G$H
+    H2 <- H
+    H2[1:grid.kk] <- array(1:grid.kk, rep(grid.size, k))
+    perc <- 10
+    for (j in 1:grid.kk) {
+      index <- which(H2==j, arr.ind=TRUE)
+      u <- rep(NA, k)
+      for (i in 1:k) u[i] <- G$grid.k[i,index[i]]
+      H[j] <- n * depth(u, D, approx=TRUE)
+      if (100 * j/grid.kk >= perc && verbose == TRUE) {
+        message(paste("Calculation of halfspace location depths: ", 
+                      round(100 * j/grid.kk, 0), " % of grid points done", 
+                      sep = ""))
+        perc <- perc + 10
+      }
+    }
+  }
+  return(H)            
 }
+
 
 ##' Calculates the depth median.
 ##'
@@ -160,40 +160,40 @@ hldepth <- function (D, G, verbose = TRUE)
 ##' G <- gridfun(D1, grid.size=20)
 ##' G$H <- hldepth(D1, G, verbose=TRUE)
 ##' dm <- depmed(G) ### Calculation of the depth median
-depmed <- function (G) 
+depmed = function (G) 
 {
-	if (length(G$grid.k)==0) {
-		grid.size <- length(G$grid.x)
-		maxi <- max(G$H)[1]
-		H2 <- (G$H == maxi)
-		i2 <- rep(0, grid.size)
-		j2 <- rep(0, grid.size)
-		k2 <- rep(0, grid.size)
-		for (i in 1:grid.size) {
-			for (j in 1:grid.size) {
-				for (k in 1:grid.size) {
-					if (H2[i, j, k] == TRUE) {
-					  i2[i] <- i
-					  j2[j] <- j
-					  k2[k] <- k
-					}
-				}
-			}
-		}
-		med.i <- median(G$grid.x[which(i2 != 0)])
-		med.j <- median(G$grid.y[which(j2 != 0)])
-		med.k <- median(G$grid.z[which(k2 != 0)])
-		return(c(med.i, med.j, med.k))
-	}
-	if (length(G$grid.k)>0) {
-		k = dim(G$grid.k)[1]
-		maxi = max(G$H)[1]
-		index = which(G$H==maxi, arr.ind=TRUE)
-		med = matrix(NA, k, dim(index)[1])
-		for (i in 1:k) med[i,] = G$grid.k[i,index[i]]
-		med = apply(med, 1, median)
-		return(med)
-	}
+  if (length(G$grid.k)==0) {
+    grid.size <- length(G$grid.x)
+    maxi <- max(G$H)[1]
+    H2 <- (G$H == maxi)
+    i2 <- rep(0, grid.size)
+    j2 <- rep(0, grid.size)
+    k2 <- rep(0, grid.size)
+    for (i in 1:grid.size) {
+      for (j in 1:grid.size) {
+        for (k in 1:grid.size) {
+          if (H2[i, j, k] == TRUE) {
+            i2[i] <- i
+            j2[j] <- j
+            k2[k] <- k
+          }
+        }
+      }
+    }
+    med.i <- median(G$grid.x[which(i2 != 0)])
+    med.j <- median(G$grid.y[which(j2 != 0)])
+    med.k <- median(G$grid.z[which(k2 != 0)])
+    return(c(med.i, med.j, med.k))
+  }
+  if (length(G$grid.k)>0) {
+    k = dim(G$grid.k)[1]
+    maxi = max(G$H)[1]
+    index = which(G$H==maxi, arr.ind=TRUE)
+    med = matrix(NA, k, dim(index)[1])
+    for (i in 1:k) med[i,] = G$grid.k[i,index[i]]
+    med = apply(med, 1, median)
+    return(med)
+  }
 }
 
 
@@ -282,94 +282,93 @@ depmed <- function (G)
 ##' gem(L$coords.loop, L$hull.loop, blue)
 bag <- function (D, G) 
 {
-    require(geometry)
-	if (dim(D)[2]==3) {
-		grid.size = dim(G$H)[1]
-		n <- dim(D)[1]
-		D.k <- rep(NA, n)
-		for (i in 1:n) {
-			I <- matrix(NA, 8, 3)
-			I[1, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
-				G$grid.y[max(which(G$grid.y <= D[i, 2]))], G$grid.z[max(which(G$grid.z <= 
-					D[i, 3]))])
-			I[2, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
-				G$grid.y[max(which(G$grid.y <= D[i, 2]))], G$grid.z[min(which(G$grid.z >= 
-					D[i, 3]))])
-			I[3, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
-				G$grid.y[min(which(G$grid.y >= D[i, 2]))], G$grid.z[max(which(G$grid.z <= 
-					D[i, 3]))])
-			I[4, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
-				G$grid.y[min(which(G$grid.y >= D[i, 2]))], G$grid.z[min(which(G$grid.z >= 
-					D[i, 3]))])
-			I[5, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
-				G$grid.y[max(which(G$grid.y <= D[i, 2]))], G$grid.z[max(which(G$grid.z <= 
-					D[i, 3]))])
-			I[6, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
-				G$grid.y[max(which(G$grid.y <= D[i, 2]))], G$grid.z[min(which(G$grid.z >= 
-					D[i, 3]))])
-			I[7, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
-				G$grid.y[min(which(G$grid.y >= D[i, 2]))], G$grid.z[max(which(G$grid.z <= 
-					D[i, 3]))])
-			I[8, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
-				G$grid.y[min(which(G$grid.y >= D[i, 2]))], G$grid.z[min(which(G$grid.z >= 
-					D[i, 3]))])
-			I <- cbind(I, NA)
-			for (t in 1:8) {
-				index1 <- match(I[t, 1], G$grid.x)
-				index2 <- match(I[t, 2], G$grid.y)
-				index3 <- match(I[t, 3], G$grid.z)
-				I[, 4] <- G$H[index1, index2, index3]
-			}
-			D.k[i] <- min(I[, 4])
-		}
-		H2 <- (G$H >= max(which(cumsum(table(D.k)) <= (n/2))))
-		BAG <- matrix(NA, 0, 3)
-		for (i in 1:grid.size) {
-			for (j in 1:grid.size) {
-				for (k in 1:grid.size) {
-					if (H2[i, j, k] == TRUE) {
-					  BAG <- rbind(BAG, c(G$grid.x[i], G$grid.y[j], 
-						G$grid.z[k]))
-					}
-				}
-			}
-		}
-		convH <- convhulln(BAG)
-	}
-	if (dim(D)[2]>3) {
-		n = dim(D)[1]
-		d = dim(D)[2]
-		k = dim(G$grid.k)[2]
-		I = matrix(NA, 2^d, d)
-		D.k = rep(NA, n)
-		for (i in 1:n) {
-			U = cbind(G$grid.k, as.numeric(D[i,]))
-			U2 = U
-			for (t in 1:d) {
-				U2[t,] = rank(U[t,], ties.method="first")
-				dimnames(G$H)[[t]] = 1:k
-			}
-			I = t(matrix(U2[,k+1]-1, nrow=d, ncol=2^d))
-			for (t in 1:d) I[,t] = I[,t] + as.numeric(gl(2, 2^(d-t), 2^d)) - 1
-			I[which(I>k)] = k
-			I = cbind(I, NA)
-			for (s in 1:(2^d)) I[s,d+1] = G$H[t(matrix(as.character(I[s,1:d])))]
-			D.k[i] = min(I[,d+1])
-		}
-		H2 <- (G$H >= max(which(cumsum(table(D.k)) <= (n/2))))
-		H3 <- H2
-		H3[1:(k^d)] <- array(1:(k^d), rep(k, d))
-		BAG = matrix(NA, table(H2)[2], d)
-		index = which(H2==TRUE)
-		for (t in 1:length(index)) {
-			index2 = which(H3==index[t], arr.ind=TRUE)
-			for (j in 1:d) BAG[t,j] = G$grid.k[j,index2[j]]
-		}
-		convH <- convhulln(BAG)
-	}
-    return(list(coords = BAG, hull = convH))
+  require(geometry)
+  if (dim(D)[2]==3) {
+    grid.size = dim(G$H)[1]
+    n <- dim(D)[1]
+    D.k <- rep(NA, n)
+    for (i in 1:n) {
+      I <- matrix(NA, 8, 3)
+      I[1, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
+                  G$grid.y[max(which(G$grid.y <= D[i, 2]))],
+                  G$grid.z[max(which(G$grid.z <= D[i, 3]))])
+      I[2, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
+                  G$grid.y[max(which(G$grid.y <= D[i, 2]))],
+                  G$grid.z[min(which(G$grid.z >= D[i, 3]))])
+      I[3, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
+                  G$grid.y[min(which(G$grid.y >= D[i, 2]))],
+                  G$grid.z[max(which(G$grid.z <= D[i, 3]))])
+      I[4, ] <- c(G$grid.x[max(which(G$grid.x <= D[i, 1]))], 
+                  G$grid.y[min(which(G$grid.y >= D[i, 2]))],
+                  G$grid.z[min(which(G$grid.z >= D[i, 3]))])
+      I[5, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
+                  G$grid.y[max(which(G$grid.y <= D[i, 2]))],
+                  G$grid.z[max(which(G$grid.z <= D[i, 3]))])
+      I[6, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
+                  G$grid.y[max(which(G$grid.y <= D[i, 2]))],
+                  G$grid.z[min(which(G$grid.z >= D[i, 3]))])
+      I[7, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
+                  G$grid.y[min(which(G$grid.y >= D[i, 2]))],
+                  G$grid.z[max(which(G$grid.z <= D[i, 3]))])
+      I[8, ] <- c(G$grid.x[min(which(G$grid.x >= D[i, 1]))], 
+                  G$grid.y[min(which(G$grid.y >= D[i, 2]))],
+                  G$grid.z[min(which(G$grid.z >= D[i, 3]))])
+      I <- cbind(I, NA)
+      for (t in 1:8) {
+        index1 <- match(I[t, 1], G$grid.x)
+        index2 <- match(I[t, 2], G$grid.y)
+        index3 <- match(I[t, 3], G$grid.z)
+        I[, 4] <- G$H[index1, index2, index3]
+      }
+      D.k[i] <- min(I[, 4])
+    }
+    H2 <- (G$H >= max(which(cumsum(table(D.k)) <= (n/2))))
+    BAG <- matrix(NA, 0, 3)
+    for (i in 1:grid.size) {
+      for (j in 1:grid.size) {
+        for (k in 1:grid.size) {
+          if (H2[i, j, k] == TRUE) {
+            BAG <- rbind(BAG, c(G$grid.x[i], G$grid.y[j], 
+                                G$grid.z[k]))
+          }
+        }
+      }
+    }
+    convH <- convhulln(BAG)
+  }
+  if (dim(D)[2]>3) {
+    n = dim(D)[1]
+    d = dim(D)[2]
+    k = dim(G$grid.k)[2]
+    I = matrix(NA, 2^d, d)
+    D.k = rep(NA, n)
+    for (i in 1:n) {
+      U = cbind(G$grid.k, as.numeric(D[i,]))
+      U2 = U
+      for (t in 1:d) {
+        U2[t,] = rank(U[t,], ties.method="first")
+        dimnames(G$H)[[t]] = 1:k
+      }
+      I = t(matrix(U2[,k+1]-1, nrow=d, ncol=2^d))
+      for (t in 1:d) I[,t] = I[,t] + as.numeric(gl(2, 2^(d-t), 2^d)) - 1
+      I[which(I>k)] = k
+      I = cbind(I, NA)
+      for (s in 1:(2^d)) I[s,d+1] = G$H[t(matrix(as.character(I[s,1:d])))]
+      D.k[i] = min(I[,d+1])
+    }
+    H2 <- (G$H >= max(which(cumsum(table(D.k)) <= (n/2))))
+    H3 <- H2
+    H3[1:(k^d)] <- array(1:(k^d), rep(k, d))
+    BAG = matrix(NA, table(H2)[2], d)
+    index = which(H2==TRUE)
+    for (t in 1:length(index)) {
+      index2 = which(H3==index[t], arr.ind=TRUE)
+      for (j in 1:d) BAG[t,j] = G$grid.k[j,index2[j]]
+    }
+    convH <- convhulln(BAG)
+  }
+  return(list(coords = BAG, hull = convH))
 }
-
 
 
 ##' Calculates the fence and the loop of a gemplot (i.e. the outer gemstone).
@@ -459,29 +458,28 @@ bag <- function (D, G)
 ##' gem(L$coords.loop, L$hull.loop, blue)
 loop <- function (D, B, inflation=3, dm) 
 {
-	n <- dim(D)[1]
-	d = dim(D)[2]
-	if (d==3) dm = matrix(dm, 1, 3)
-    index.F <- sort(intersect(as.vector(B$hull), as.vector(B$hull)))
-    FENCE <- B$coords[index.F, ]
-    MED.MAT <- t(matrix(dm, d, dim(FENCE)[1]))
-    FENCE <- MED.MAT + inflation * (FENCE - MED.MAT)
-    colnames(FENCE) <- colnames(D)
-    convH <- convhulln(FENCE)
-    outliers <- rep(0, n)
-    for (i in 1:n) {
-        Z <- rbind(FENCE, D[i, ])
-        convH.Z <- convhulln(Z)
-        if (!is.na(match(dim(FENCE)[1] + 1, convH.Z))) {
-            outliers[i] <- 1
-        }
+  n <- dim(D)[1]
+  d = dim(D)[2]
+  if (d==3) dm = matrix(dm, 1, 3)
+  index.F <- sort(intersect(as.vector(B$hull), as.vector(B$hull)))
+  FENCE <- B$coords[index.F, ]
+  MED.MAT <- t(matrix(dm, d, dim(FENCE)[1]))
+  FENCE <- MED.MAT + inflation * (FENCE - MED.MAT)
+  colnames(FENCE) <- colnames(D)
+  convH <- convhulln(FENCE)
+  outliers <- rep(0, n)
+  for (i in 1:n) {
+    Z <- rbind(FENCE, D[i, ])
+    convH.Z <- convhulln(Z)
+    if (!is.na(match(dim(FENCE)[1] + 1, convH.Z))) {
+      outliers[i] <- 1
     }
-    LOOP <- D[which(outliers == 0), ]
-    convH2 <- convhulln(LOOP)
-    return(list(coords.loop = LOOP, hull.loop = convH2, coords.fence = FENCE, 
-	hull.fence = convH, outliers = outliers))
+  }
+  LOOP <- D[which(outliers == 0), ]
+  convH2 <- convhulln(LOOP)
+  return(list(coords.loop = LOOP, hull.loop = convH2, coords.fence = FENCE, 
+              hull.fence = convH, outliers = outliers))
 }
-
 
 
 ##' Plots a gemstone to an interactive graphics device.
@@ -555,13 +553,34 @@ loop <- function (D, B, inflation=3, dm)
 ##' spheres3d(dm[1], dm[2], dm[3], col=white, radius=0.1)
 ##' gem(B$coords, B$hull, blue)
 ##' gem(L$coords.loop, L$hull.loop, blue)
+##'
+##' ### Example of outlier detection with four principal components.
+##' ### Attention: calculation is currently time-consuming.
+##'
+##' set.seed(123)
+##' n <- 200
+##' x1 <- rnorm(n, 0, 1)
+##' x2 <- rnorm(n, 0, 1)
+##' x3 <- rnorm(n, 0, 1)
+##' x4 <- rnorm(n, 0, 1)
+##' D <- data.frame(cbind(x1, x2, x3, x4))
+##' D[67,] = c(7, 0, 0, 0)
+##' 
+##' date()
+##' G = gridfun(D, 20, 4)
+##' G$H = hldepth(D, G, verbose=TRUE)
+##' dm = depmed(G)
+##' B = bag(D, G)
+##' L = loop(D, B, dm=dm)
+##' which(L$outliers==1)
+##' date()
 gem <- function (coords, hull, clr) 
 {
-    require(geometry)
-    for (i in 1:dim(hull)[1]) {
-        x <- coords[hull[i, ], 1]
-        y <- coords[hull[i, ], 2]
-        z <- coords[hull[i, ], 3]
-        triangles3d(x, y, z, col = clr)
-    }
+  require(geometry)
+  for (i in 1:dim(hull)[1]) {
+    x <- coords[hull[i, ], 1]
+    y <- coords[hull[i, ], 2]
+    z <- coords[hull[i, ], 3]
+    triangles3d(x, y, z, col = clr)
+  }
 }

@@ -76,10 +76,12 @@ gem(B$coords, B$hull, blue)
 gem(L$coords.loop, L$hull.loop, blue)
 }
 \references{
-Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The
+\itemize{
+\item Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The
   bagplot: a bivariate boxplot. The American Statistician, 53(4),
   382-387.
-Kruppa, J. and Jung, K. (2017) Automated multigroup
+\item Kruppa, J. and Jung, K. (2017) Automated multigroup
   outlier identification in molecular high-throughput data using
-  bagplots and gemplots. BMC Bioinformatics, 18, 232
+  bagplots and gemplots. BMC Bioinformatics, 18, 232 
+}
 }

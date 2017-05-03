@@ -89,12 +89,11 @@ spheres3d(dm[1], dm[2], dm[3], col=yel, radius=0.1)
 gem(B$coords, B$hull, blue)
 gem(L$coords.loop, L$hull.loop, blue)
 }
-\author{
-Jochen Kruppa, Klaus Jung
-}
 \references{
 Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The
     bagplot: a bivariate boxplot. The American Statistician,
     53(4), 382-387.
 }
-
+\author{
+Jochen Kruppa, Klaus Jung
+}

@@ -45,12 +45,11 @@ colnames(D1) <- c("x", "y", "z")
 G <- gridfun(D1, grid.size=20)
 G$H <- hldepth(D1, G, verbose=TRUE)
 }
-\author{
-Jochen Kruppa, Klaus Jung
-}
 \references{
 Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The
     bagplot: a bivariate boxplot. The American Statistician,
     53(4), 382-387.
 }
-
+\author{
+Jochen Kruppa, Klaus Jung
+}

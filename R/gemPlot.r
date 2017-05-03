@@ -17,8 +17,11 @@
 ##' specified in the \code{\link{gridfun}} function.
 ##' 
 ##' @references Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The
-##'     bagplot: a bivariate boxplot. The American Statistician,
-##'     53(4), 382-387.  
+##'   bagplot: a bivariate boxplot. The American Statistician, 53(4),
+##'   382-387.
+##' Kruppa, J. and Jung, K. (2017) Automated multigroup
+##'   outlier identification in molecular high-throughput data using
+##'   bagplots and gemplots. BMC Bioinformatics, 18, 232 
 ##'
 ##' @docType package
 ##' @name gemPlot

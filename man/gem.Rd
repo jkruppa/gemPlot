@@ -104,4 +104,3 @@ date()
 \author{
 Jochen Kruppa, Klaus Jung
 }
-

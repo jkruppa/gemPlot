@@ -42,4 +42,3 @@ than three columns, k must be specified.
 \author{
 Jochen Kruppa, Klaus Jung
 }
-

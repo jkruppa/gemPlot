@@ -94,7 +94,7 @@ hldepth = function (D, G, verbose = TRUE)
       for (j in 1:grid.size) {
         for (k in 1:grid.size) {
           u <- c(G$grid.x[i], G$grid.y[j], G$grid.z[k])
-          H[i, j, k] <- n * depth(u, D)
+          H[i, j, k] <- n * depth::depth(u, D)
         }
       }
       if (100 * i/grid.size >= perc && verbose == TRUE) {
@@ -118,7 +118,7 @@ hldepth = function (D, G, verbose = TRUE)
       index <- which(H2==j, arr.ind=TRUE)
       u <- rep(NA, k)
       for (i in 1:k) u[i] <- G$grid.k[i,index[i]]
-      H[j] <- n * depth(u, D, approx=TRUE)
+      H[j] <- n * depth::depth(u, D, approx=TRUE)
       if (100 * j/grid.kk >= perc && verbose == TRUE) {
         message(paste("Calculation of halfspace location depths: ", 
                       round(100 * j/grid.kk, 0), " % of grid points done", 

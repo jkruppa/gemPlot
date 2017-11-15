@@ -456,7 +456,7 @@ bag <- function (D, G)
 ##' spheres3d(dm[1], dm[2], dm[3], col=yel, radius=0.1)
 ##' gem(B$coords, B$hull, blue)
 ##' gem(L$coords.loop, L$hull.loop, blue)
-loop <- function (D, B, inflation=3, dm) 
+loop <- function (D, B, inflation = 3, dm) 
 {
   n <- dim(D)[1]
   d = dim(D)[2]

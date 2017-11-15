@@ -1,6 +1,6 @@
 Package: gemPlot
 Title: Calculation and visualization of gemplots (3-dimensional extension of boxplot and bagplot).
-Version: 1.0.0.3
+Version: 1.0.0.4
 Author: Jochen Kruppa [aut], Klaus Jung [aut, cre]
 Maintainer: Klaus Jung <klaus.jung@tiho-hannover.de>
 Description: Gemplots are the 3-dimensional extension of the 1-dimensional boxplots and the 2-dimensional bagplot. The package calculates a 3-dimensional median, an inner bag that contains 50 percent of the data and an outer bag. Data points outside the outer bag are flagged as outliers. The gemplot can be visualized in a 3-dimensional interactice device. Outlier detection for more than 3 dimensions is also implemented.
